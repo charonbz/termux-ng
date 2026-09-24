@@ -39,15 +39,18 @@ Samsung Galaxy Tab S11 Ultra (SM-X930), Android 16 / API 36, `arm64-v8a` only. R
 ADB=~/Android/Sdk/platform-tools/adb
 $ADB devices -l                         # check the tablet is listed
 $ADB connect 100.116.85.108:45481       # if not listed
-$ADB install -r app/build/outputs/apk/demo/newtermux-test-coexist_demo_arm64-v8a.apk
-$ADB shell am start -n com.termux.demo/com.termux.app.TermuxActivity
+$ADB install -r app/build/outputs/apk/debug/termux-app_apt-android-7-debug_arm64-v8a.apk
+$ADB shell am start -n com.termux/com.termux.app.TermuxActivity
 ```
 
-The tablet still runs the Google Play Termux (`com.termux`) until `docs/PLAN-replace-play-termux.md` is done. Until then only the demo build can be installed; installing the debug build fails with a signature conflict.
+The tablet runs the debug build as its everyday Termux (`com.termux`; Play Termux was replaced, see `docs/archive/PLAN-replace-play-termux.md`). `install -r` keeps the user's data. Never `adb uninstall com.termux`: that deletes `$HOME`. The demo build (`com.termux.demo`, fake shell) is also installed and suits risky UI experiments.
+
+The debug build is debuggable, so `$ADB shell "run-as com.termux sh -c '…'"` runs commands as the app. Quote the whole command as one string, because adb re-splits the arguments. To run Termux tools, set `PREFIX=/data/data/com.termux/files/usr`, `HOME=/data/data/com.termux/files/home`, `PATH=$PREFIX/bin`, `TMPDIR=$PREFIX/tmp`. Files for `run-as` go through `/data/local/tmp`, because `adb exec-in` does not pass stdin through `run-as`.
 
 ## Verification helpers
 
 - Screenshot: `$ADB exec-out screencap -p > /tmp/shot.png`, then read the image.
 - UI tree with coordinates: `$ADB shell uiautomator dump /sdcard/ui.xml && $ADB shell cat /sdcard/ui.xml`.
 - Tap/swipe: `$ADB shell input tap X Y`, `$ADB shell input swipe X1 Y1 X2 Y2 300`.
-- Force-stop: `$ADB shell am force-stop com.termux.demo`.
+- Force-stop: `$ADB shell am force-stop com.termux`.
+- The user often has another app in the foreground; bring Termux to the front with `am start` before screenshots or UI dumps.

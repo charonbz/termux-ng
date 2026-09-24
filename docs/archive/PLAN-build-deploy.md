@@ -19,7 +19,7 @@ Scope: `app/build.gradle`, `app/src/main/res/values/strings.xml`, `app/src/main/
 |Signing|Shared Termux debug key `app/testkey_untrusted.jks`, as upstream. Official NewTermux releases and our builds can replace each other.|
 |App name|"Termux NG" (launcher label and toolbar title). Version name and version code stay as upstream (`1.6.2` / 28).|
 |Toolchain|JDK Temurin 17, pinned in `mise.toml` (found during implementation: the global OpenJDK 17.0.2 fails the Gradle build on the `CgroupInfo` JDK bug). Android SDK at `~/Android/Sdk` with `platforms;android-36`, `build-tools;36.0.0`, `ndk;29.0.14206865`; `local.properties` with `sdk.dir`.|
-|First deployment|The `demo` build type (`com.termux.demo`, fake shell), installed beside Play Termux. The real `debug` build is only built, not installed; installing it is PLAN-replace-play-termux.md.|
+|First deployment|The `demo` build type (`com.termux.demo`, fake shell), installed beside Play Termux. The real `debug` build is only built, not installed; installing it is archive/PLAN-replace-play-termux.md.|
 |Target|Samsung Galaxy Tab S11 Ultra (SM-X930), Android 16 / API 36, `arm64-v8a`, wireless adb.|
 
 ## Code changes
