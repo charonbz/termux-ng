@@ -13,6 +13,7 @@ public class NewTermuxSettings {
     public static final String KEY_SHOW_STT_BUTTON      = "show_stt_button";
     public static final String KEY_SHOW_PACKAGES_BUTTON = "show_packages_button";
     public static final String KEY_SHOW_CLEAR_BUTTON        = "show_clear_button";
+    public static final String KEY_SHOW_TOP_BAR             = "show_top_bar";
     public static final String KEY_ZSH_PLUGINS = "zsh_plugins";
     public static final String KEY_SESSION_TABS             = "session_tabs";
     public static final String KEY_AUTOCORRECT               = "autocorrect_enabled";
@@ -54,6 +55,10 @@ public class NewTermuxSettings {
     }
     public static boolean isShowClearButton(Context ctx) {
         return prefs(ctx).getBoolean(KEY_SHOW_CLEAR_BUTTON, true);
+    }
+    /** Whole top block: button row and session tabs. */
+    public static boolean isShowTopBar(Context ctx) {
+        return prefs(ctx).getBoolean(KEY_SHOW_TOP_BAR, true);
     }
     public static boolean isZshPluginsEnabled(Context ctx) {
         return prefs(ctx).getBoolean(KEY_ZSH_PLUGINS, false);
@@ -130,6 +135,7 @@ public class NewTermuxSettings {
             case KEY_SHOW_STT_BUTTON:      return isShowSttButton(ctx);
             case KEY_SHOW_PACKAGES_BUTTON: return isShowPackagesButton(ctx);
             case KEY_SHOW_CLEAR_BUTTON:    return isShowClearButton(ctx);
+            case KEY_SHOW_TOP_BAR:         return isShowTopBar(ctx);
             case KEY_ZSH_PLUGINS:                  return isZshPluginsEnabled(ctx);
             case KEY_SESSION_TABS:                 return isSessionTabsEnabled(ctx);
             case KEY_AUTOCORRECT:                  return isAutocorrectEnabled(ctx);

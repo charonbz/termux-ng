@@ -190,9 +190,9 @@ private fun SwitchRow(title: String, summary: String?, checked: Boolean, enabled
 
 /** Bool switch backed by NewTermuxSettings.get/set. */
 @Composable
-private fun NtSwitch(context: Context, key: String, title: String, summary: String?) {
+private fun NtSwitch(context: Context, key: String, title: String, summary: String?, enabled: Boolean = true) {
     var checked by remember { mutableStateOf(NewTermuxSettings.get(context, key)) }
-    SwitchRow(title, summary, checked) {
+    SwitchRow(title, summary, checked, enabled) {
         checked = it
         NewTermuxSettings.set(context, key, it)
     }
@@ -296,6 +296,7 @@ private fun FeaturesScreen(activity: Activity, onBack: () -> Unit) {
 
     val zshInstalled = remember { File(TermuxConstants.TERMUX_PREFIX_DIR_PATH, "bin/zsh").exists() }
 
+    var showTopBar by remember { mutableStateOf(NewTermuxSettings.isShowTopBar(context)) }
     SettingsScaffold("Features", onBack) { mod ->
         Column(modifier = mod) {
             CategoryHeader("Keyboard")
@@ -306,6 +307,10 @@ private fun FeaturesScreen(activity: Activity, onBack: () -> Unit) {
             NtSwitch(context, NewTermuxSettings.KEY_EXTRA_KEYS_IN_DRAWER, "Extra Keys in Right Drawer", "Move extra keys to a swipeable right-side drawer — takes effect on restart")
 
             CategoryHeader("Toolbar Buttons")
+            SwitchRow("Show Top Bar", "Show the button bar and session tabs at the top — also toggled from the left drawer", showTopBar) {
+                showTopBar = it
+                NewTermuxSettings.set(context, NewTermuxSettings.KEY_SHOW_TOP_BAR, it)
+            }
             NtSwitch(context, NewTermuxSettings.KEY_SHOW_AC_BUTTON, "AC Toggle Button", "Show autocorrect on/off button in toolbar")
             NtSwitch(context, NewTermuxSettings.KEY_SHOW_ROOT_BUTTON, "Root Toggle Button", null)
             NtSwitch(context, NewTermuxSettings.KEY_SHOW_STT_BUTTON, "Speech-to-Text Button", null)
@@ -313,7 +318,9 @@ private fun FeaturesScreen(activity: Activity, onBack: () -> Unit) {
             NtSwitch(context, NewTermuxSettings.KEY_SHOW_CLEAR_BUTTON, "Clear Terminal Button", null)
 
             CategoryHeader("Session Tabs")
-            NtSwitch(context, NewTermuxSettings.KEY_SESSION_TABS, "Show Session Tabs", "Show session tab chips at the top")
+            NtSwitch(context, NewTermuxSettings.KEY_SESSION_TABS, "Show Session Tabs",
+                if (showTopBar) "Show session tab chips at the top" else "Hidden with the top bar",
+                enabled = showTopBar)
             NtSwitch(context, NewTermuxSettings.KEY_SESSION_RENAME_ENABLED, "Session Renaming", "Long-press a session tab to rename it")
 
             CategoryHeader("Startup")

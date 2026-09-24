@@ -503,6 +503,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         setVisible(R.id.btn_stt, NewTermuxSettings.isShowSttButton(this));
         setVisible(R.id.btn_packages_menu, NewTermuxSettings.isShowPackagesButton(this));
         setVisible(R.id.btn_clear_terminal, NewTermuxSettings.isShowClearButton(this));
+        // Whole top block (button row + session tabs); session_tabs_scroll lives inside it
+        setVisible(R.id.newtermux_toolbar_container, NewTermuxSettings.isShowTopBar(this));
         // Hide/show the whole scroll container (chip group lives inside it)
         setVisible(R.id.session_tabs_scroll, NewTermuxSettings.isSessionTabsEnabled(this));
         // Autocorrect initial enabled state
@@ -1160,10 +1162,28 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         int marginBtm = Math.round(6 * getResources().getDisplayMetrics().density);
 
-        // --- Utility buttons (always at top, unless toggled off in Settings) ---
+        // --- Utility buttons (always at top) ---
+        boolean showTopBar = NewTermuxSettings.isShowTopBar(this);
+        MaterialButton topBarBtn = new MaterialButton(this,
+            null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+        LinearLayout.LayoutParams topBarLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        topBarLp.bottomMargin = marginBtm;
+        topBarBtn.setLayoutParams(topBarLp);
+        topBarBtn.setStrokeColor(accentCsl);
+        topBarBtn.setTextColor(accentColor);
+        topBarBtn.setText(showTopBar ? "Hide Top Bar" : "Show Top Bar");
+        topBarBtn.setOnClickListener(v -> {
+            getDrawer().closeDrawers();
+            NewTermuxSettings.set(this, NewTermuxSettings.KEY_SHOW_TOP_BAR, !showTopBar);
+            applyFeatureSettings();
+            setupDrawerCommandButtons();
+        });
+        container.addView(topBarBtn);
+
+        // Export/script and pkg update can be toggled off in Settings
         boolean showExportScript = NewTermuxSettings.isShowDrawerExportScript(this);
         boolean showPkgUpdate    = NewTermuxSettings.isShowDrawerPkgUpdate(this);
-        boolean anyUtility = showExportScript || showPkgUpdate;
 
         if (showExportScript) {
             MaterialButton exportBtn = new MaterialButton(this,
@@ -1219,16 +1239,14 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         }
 
         // Divider between utility and custom buttons
-        if (anyUtility) {
-            android.view.View divider = new android.view.View(this);
-            LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, Math.round(1 * getResources().getDisplayMetrics().density));
-            dlp.topMargin = Math.round(2 * getResources().getDisplayMetrics().density);
-            dlp.bottomMargin = marginBtm;
-            divider.setLayoutParams(dlp);
-            divider.setBackgroundColor((accentColor & 0x00FFFFFF) | 0x55000000); // 33% alpha accent
-            container.addView(divider);
-        }
+        android.view.View divider = new android.view.View(this);
+        LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, Math.round(1 * getResources().getDisplayMetrics().density));
+        dlp.topMargin = Math.round(2 * getResources().getDisplayMetrics().density);
+        dlp.bottomMargin = marginBtm;
+        divider.setLayoutParams(dlp);
+        divider.setBackgroundColor((accentColor & 0x00FFFFFF) | 0x55000000); // 33% alpha accent
+        container.addView(divider);
 
         // --- Custom command buttons ---
         if (!NewTermuxSettings.isShowDrawerCmdButtons(this)) return;

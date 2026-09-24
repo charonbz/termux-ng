@@ -26,7 +26,7 @@ mise exec -- ./gradlew assembleDebug  # com.termux, the real app
 
 A clean build takes more than 5 minutes: run it with a long timeout. The first build downloads the pinned bootstrap zips from `termux/termux-packages` releases.
 
-APKs (split per ABI):
+APKs are split per ABI only when a Gradle task name contains `Debug` (`app/build.gradle`), so `assembleDemo` alone produces just the 140 MB universal APK. Run `assembleDemo assembleDebug` together to get the split demo APKs:
 
 - `app/build/outputs/apk/demo/newtermux-test-coexist_demo_arm64-v8a.apk`
 - `app/build/outputs/apk/debug/termux-app_apt-android-7-debug_arm64-v8a.apk`
