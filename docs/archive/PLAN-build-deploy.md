@@ -1,6 +1,6 @@
 # Build and deploy the NewTermux fork
 
-Status: Agreed in a grilling session on 2026-09-24. Not implemented yet.
+Status: Agreed in a grilling session on 2026-09-24. Implemented and verified on SM-X930 on 2026-09-24.
 Depends on: nothing.
 Scope: `app/build.gradle`, `app/src/main/res/values/strings.xml`, `app/src/main/res/layout/newtermux_toolbar.xml`, `mise.toml`, `local.properties` (untracked), `AGENTS.md`, Android SDK under `~/Android/Sdk`.
 

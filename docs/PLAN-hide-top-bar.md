@@ -1,7 +1,7 @@
 # Option to hide the top bar
 
 Status: Agreed in a grilling session on 2026-09-24. Not implemented yet.
-Depends on: PLAN-build-deploy.md (needs a working build and deployment).
+Depends on: archive/PLAN-build-deploy.md (needs a working build and deployment).
 Scope: `app/src/main/java/com/newtermux/features/NewTermuxSettings.java`, `app/src/main/java/com/termux/app/TermuxActivity.java`, `app/src/main/java/com/termux/app/activities/SettingsActivity.kt`.
 
 ## Problems today

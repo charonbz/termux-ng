@@ -1,7 +1,7 @@
 # Replace Play Termux with termux-ng on the tablet
 
 Status: Agreed in a grilling session on 2026-09-24. Not implemented yet. Runs only when the user asks for it.
-Depends on: PLAN-build-deploy.md (a working `debug` build). PLAN-hide-top-bar.md should land first so the switch brings the wanted feature.
+Depends on: archive/PLAN-build-deploy.md (a working `debug` build). PLAN-hide-top-bar.md should land first so the switch brings the wanted feature.
 Scope: the tablet only (no code changes).
 
 ## Problems today
